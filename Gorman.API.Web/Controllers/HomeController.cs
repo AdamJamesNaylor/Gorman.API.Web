@@ -25,6 +25,7 @@ namespace Gorman.API.Web.Controllers {
                 Actors = new Collection<Actor> {sniper, grunt}
             };
             rootStrategy = await activityService.Add(rootStrategy);
+            return View();
 
             var moveIntoPositionActivity = new Activity {ParentId = rootStrategy.Id};
             moveIntoPositionActivity = await activityService.Add(moveIntoPositionActivity);
