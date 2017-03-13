@@ -73,6 +73,29 @@
     //add buttons
     var activity = @Html.Raw(JsonConvert.SerializeObject(Model));
 
+    function CreateButtons(leafletMap) {
+        L.Control.NextPhaseButton = L.Control.extend({
+            onAdd: function (map) {
+                var input = L.DomUtil.create('input');
+                input.type = "button";
+                input.value = ">";
+                input.id = "nextPhaseButton";
+
+                return input;
+            },
+
+            onRemove: function (map) {
+                // Nothing to do here
+            }
+        });
+
+        L.control.nextPhaseButton = function (opts) {
+            return new L.Control.NextPhaseButton(opts);
+        }
+
+        L.control.nextPhaseButton({ position: 'bottomleft' }).addTo(leafletMap);
+    }
+
     $(document).ready(function() {
         var leafletMap = L.map('map', {
             minZoom: 1,
@@ -95,28 +118,35 @@
 
         leafletMap.setMaxBounds(bounds);
 
-        L.Control.NextPhaseButton = L.Control.extend({
-            onAdd: function (map) {
-                var input = L.DomUtil.create('input');
-                input.type = "button";
-                input.value = ">";
-                input.id = "nextPhaseButton";
+        CreateButtons(leafletMap);
 
-                return input;
-            },
 
-            onRemove: function (map) {
-                // Nothing to do here
-            }
-        });
+        var actorIcons = [];
 
-        L.control.nextPhaseButton = function (opts) {
-            return new L.Control.NextPhaseButton(opts);
+        for (var i = 0; i < activity.actors.length; ++i) {
+            var actor = activity.actors[i];
+            var startLatLng = leafletMap.unproject([actor.position_x, actor.position_y], leafletMap.getMaxZoom() - 1);
+
+            var icon = L.icon({
+                iconUrl: '/images/sunderer_diagram.png',//actor.image_url,
+                iconRetinaUrl: '/images/sunderer_diagram.png',
+                iconSize: [18, 30],
+                iconAnchor: [9, 15]
+                //popupAnchor: [-3, -76]
+                //shadowUrl: 'my-icon-shadow.png',
+                //shadowRetinaUrl: 'my-icon-shadow@2x.png',
+                //shadowSize: [68, 95],
+                //shadowAnchor: [22, 94]
+            });
+
+            var duration = 20000;
+
+            var marker = L.Marker.movingMarker([startLatLng], duration, { icon: icon }).addTo(leafletMap);
+            marker.start();
+
         }
 
-        L.control.nextPhaseButton({ position: 'bottomleft' }).addTo(leafletMap);
-
-        var start = leafletMap.unproject([640, 512], leafletMap.getMaxZoom() - 1);
+        var start = leafletMap.unproject([640, 480], leafletMap.getMaxZoom() - 1);
         var destination = leafletMap.unproject([50, 50], leafletMap.getMaxZoom() - 1);
 
         var myIcon = L.icon({
@@ -131,8 +161,10 @@
             //shadowAnchor: [22, 94]
         });
 
-        var myMovingMarker = L.Marker.movingMarker([start, destination], 20000, { icon: myIcon }).addTo(leafletMap);
+        var myMovingMarker = L.Marker.movingMarker([start], 20000, { icon: myIcon }).addTo(leafletMap);
         myMovingMarker.start();
+        myMovingMarker.moveTo(destination, 20000);
+        //$(myMovingMarker._icon).hide();
     });
 
 </script>

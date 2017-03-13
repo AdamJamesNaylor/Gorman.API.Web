@@ -16,6 +16,8 @@ namespace Gorman.API.Web.Controllers {
     //http://www.stratuga.com/editor/
     //http://www.csgoboard.com/board
     //https://katanaapp.com
+    //http://cdn3.dualshockers.com/wp-content/uploads/2016/03/Starfarer_map.jpg
+
 
     public class HomeController : Controller {
         //todo rework errors as follows http://stackoverflow.com/a/1081853/17540
