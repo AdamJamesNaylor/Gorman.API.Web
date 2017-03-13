@@ -1,0 +1,127 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Player</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"/>
+
+    <script src="https://unpkg.com/jquery@3.1.1/dist/jquery.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+    <script type="text/javascript" src="/js/MovingMarker.js"></script>
+
+    <style type="text/css">
+        body {
+            background: #000;
+        }
+         #map { height: 800px; }
+        .leaflet-container {
+            background: #000;
+        }
+
+        ::-webkit-scrollbar {
+          width: 9px;
+          height: 9px;
+        }
+        ::-webkit-scrollbar-button {
+          width: 0px;
+          height: 0px;
+        }
+        ::-webkit-scrollbar-thumb {
+          background: #838383;
+          border: 72px none #ffffff;
+          border-radius: 50px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+          background: #b0b0b0;
+        }
+        ::-webkit-scrollbar-thumb:active {
+          background: #ffffff;
+        }
+        ::-webkit-scrollbar-track {
+          background: #3c3c3c;
+          border: 0px none #ffffff;
+          border-radius: 70px;
+        }
+        ::-webkit-scrollbar-track:hover {
+          background: #585858;
+        }
+        ::-webkit-scrollbar-track:active {
+          background: #333333;
+        }
+        ::-webkit-scrollbar-corner {
+          background: transparent;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+<script type="text/javascript">
+    
+    //add all actors to map, hidden, and offset
+    //find first phase
+    //
+    //add buttons
+
+    $(document).ready(function() {
+        var leafletMap = L.map('map', {
+            minZoom: 1,
+            maxZoom: 3,
+            center: [640, 512],
+            zoom: 2,
+            crs: L.CRS.Simple,
+            noWrap: true
+        });
+
+        var w = 1280,
+            h = 1024,
+            url = "/images/heyoka.png";
+
+        var southWest = leafletMap.unproject([0, h], leafletMap.getMaxZoom() - 1);
+        var northEast = leafletMap.unproject([w, 0], leafletMap.getMaxZoom() - 1);
+        var bounds = new L.LatLngBounds(southWest, northEast);
+
+        L.imageOverlay(url, bounds).addTo(leafletMap);
+
+        leafletMap.setMaxBounds(bounds);
+
+        L.Control.NextPhaseButton = L.Control.extend({
+            onAdd: function (map) {
+                var input = L.DomUtil.create('input');
+                input.type = "button";
+                input.value = ">";
+                input.id = "nextPhaseButton";
+
+                return input;
+            },
+
+            onRemove: function (map) {
+                // Nothing to do here
+            }
+        });
+
+        L.control.nextPhaseButton = function (opts) {
+            return new L.Control.NextPhaseButton(opts);
+        }
+
+        L.control.nextPhaseButton({ position: 'bottomleft' }).addTo(leafletMap);
+
+        var start = leafletMap.unproject([640, 512], leafletMap.getMaxZoom() - 1);
+        var destination = leafletMap.unproject([50, 50], leafletMap.getMaxZoom() - 1);
+
+        var myMovingMarker = L.Marker.movingMarker([start, destination],
+                        [20000]).addTo(leafletMap);
+        myMovingMarker.start();
+    });
+
+</script>
+
+</body>
+</html>
