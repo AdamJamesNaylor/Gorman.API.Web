@@ -30,17 +30,17 @@ namespace Gorman.API.Web.Controllers {
             var heyoka = new Map {TileUrl = "blargh"};
             //heyoka = await mapService.Add(heyoka);
 
-            var sunderer1 = new Actor { PositionX = 100, PositionY = 100 };
-            var sunderer2 = new Actor { PositionX = 100, PositionY = 100 };
-            var infantry = new Actor { PositionX = 100, PositionY = 100 };
-            var infiltratorTeam = new Actor { PositionX = 100, PositionY = 100 };
-            var hackIcon1 = new Actor { PositionX = 100, PositionY = 100 };
-            var hackIcon2 = new Actor { PositionX = 100, PositionY = 100 };
-            var armour = new Actor { PositionX = 100, PositionY = 100 };
-            var supress = new Actor { PositionX = 100, PositionY = 100 };
-            var enemy = new Actor { PositionX = 100, PositionY = 100 };
-            var airDrop = new Actor { PositionX = 100, PositionY = 100 };
-            var reinforcements = new Actor { PositionX = 100, PositionY = 100 };
+            var sunderer1 = new Actor { PositionX = 100, PositionY = 100, ImageUrl = "/images/sunderer_diagram.png" };
+            var sunderer2 = new Actor { PositionX = 100, PositionY = 100, ImageUrl = "/images/sunderer_diagram.png" };
+            var infantry = new Actor { PositionX = 100, PositionY = 100, ImageUrl = "/images/sunderer_diagram.png" }; //
+            var infiltratorTeam = new Actor { PositionX = 100, PositionY = 100, ImageUrl = "/images/infiltrator.png" };
+            var hackIcon1 = new Actor { PositionX = 100, PositionY = 100, ImageUrl = "/images/hack.png" };
+            var hackIcon2 = new Actor { PositionX = 100, PositionY = 100, ImageUrl = "/images/hack.png" };
+            var armour = new Actor { PositionX = 100, PositionY = 100, ImageUrl = "/images/magrider_diagram.png" };
+            var supress = new Actor { PositionX = 100, PositionY = 100, ImageUrl = "/images/icon_attack.png" };
+            var enemy = new Actor { PositionX = 100, PositionY = 100, ImageUrl = "/images/sunderer_diagram.png" }; //
+            var airDrop = new Actor { PositionX = 100, PositionY = 100, ImageUrl = "/images/sunderer_diagram.png" }; //
+            var reinforcements = new Actor { PositionX = 100, PositionY = 100, ImageUrl = "/images/sunderer_diagram.png" }; //
 
             var rootStrategy = new Activity {
                 MapId = heyoka.Id,
@@ -154,10 +154,9 @@ namespace Gorman.API.Web.Controllers {
             var endpoints = await Endpoints.Get(new Uri("http://localhost:6947/v0.1"));
             var activityService = new ActivityService(endpoints);
 
-            var strategy = await activityService.Get(39, true);
-            var model = JsonConvert.SerializeObject(strategy);
+            var activity = await activityService.Get(103, true);
 
-            return View();
+            return View(activity);
         }
     }
 }

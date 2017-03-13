@@ -107,6 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="js\Leaflet.ButtonControl.js" />
     <Content Include="js\MovingMarker.js" />
     <Content Include="Web.config" />
   </ItemGroup>
